@@ -2,7 +2,7 @@
 
 int main() {
 	printf("HOST: %s", gethostname());
-	printf("OS: %s", getos());
+	getos();
 	printf("SHELL: %s\n", getshell());
 	printf("TERM: %s\n", getterm());
 	return 0;

@@ -17,6 +17,35 @@ char *gethostname(void) {
 	return hostname;
 }
 
+char *getquotesubstr(char *string) {
+	int i = 0;
+	int substrmv = 0;
+	bool isQuotes = true;
+	char* substr = (char*)malloc(32);
+
+	while (string[i] != '\0') {
+		if (string[i] == '\"') {
+			switch (isQuotes) {
+				case true:
+					isQuotes = false;
+					break;
+				case false:
+					isQuotes = true;
+					break;
+			};
+		}
+
+		if (!isQuotes && string[i] != '\"') {
+			substr[substrmv] = string[i];
+			substrmv++;
+		}
+
+		i++;
+	}
+	
+	return substr;
+}
+
 char *getos(void) { /*WIP*/
 	FILE *file = fopen("/etc/lsb-release", "r");
 	char buf[64+1];
@@ -25,6 +54,7 @@ char *getos(void) { /*WIP*/
 	#ifdef __linux__
 		if (file == NULL) {
 			fclose(file);
+			printf("Generic Linux\n");
 			return "Generic Linux\n";
 		}
 
@@ -32,7 +62,12 @@ char *getos(void) { /*WIP*/
 		os = fgets(buf, 64, file);
 		os = fgets(buf, 64, file);
 
+		os = getquotesubstr(os);
+
+		printf("OS: %s\n", os);
+
 		fclose(file);
+		free(os);
 		return os;
 	#elif __FreeBSD__
 		return "FreeBSD";

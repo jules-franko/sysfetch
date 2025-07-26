@@ -17,7 +17,7 @@ char *gethostname(void) {
 	return hostname;
 }
 
-char *getos(void) {
+char *getos(void) { /*WIP*/
 	FILE *file = fopen("/etc/lsb-release", "r");
 	char buf[64+1];
 	char *os;
@@ -28,9 +28,9 @@ char *getos(void) {
 			return "Generic Linux\n";
 		}
 
-		if ( strstr(fgets(buf, 64, file), "DISTRIB_DESCRIPTION=") ) {
-			printf("Found");
-		}
+		os = fgets(buf, 64, file);
+		os = fgets(buf, 64, file);
+		os = fgets(buf, 64, file);
 
 		fclose(file);
 		return os;
@@ -44,4 +44,8 @@ char *getos(void) {
 
 char *getshell(void) {
 	return getenv("SHELL");
+}
+
+char *getterm(void) {
+	return getenv("TERM");
 }

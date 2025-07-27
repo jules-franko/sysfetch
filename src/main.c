@@ -8,8 +8,19 @@
 
 #define CONVERSION_GB 1024.0
 
-#define COLOR_BOLD  "\e[1m"
-#define COLOR_OFF   "\e[m"
+#define COLOR_BOLD  "\033[1m"
+#define COLOR_OFF   "\033[m"
+
+#ifndef __bool_true_false_are_defined
+    #ifdef _Bool
+        #define bool                        _Bool
+    #else
+        #define bool                        int
+    #endif
+    #define true                            1
+    #define false                           0
+    #define __bool_true_false_are_defined   1
+#endif
 
 /*Function Declarations*/
 char *gethostname(void);
@@ -24,9 +35,10 @@ char *getquotesubstr(char *string);
 void printascii(char *file);
 
 int main(int argc, char *argv[]) {
+	int i;
 
 	if (argc > 1) {
-		for (int i = 1; i < argc; i+=2) {
+		for (i = 1; i < argc; i+=2) {
 			if (strcmp(argv[i], "-h") == 0) {
 				printf("Sysfetch - A simple system info utlity. \
 \n\nARGUMENTS:\n \
@@ -45,25 +57,25 @@ Configurations can be made in the config.h file.\n");
 		}
 	}
 
-	int i = 0;
-	while (modules[i] != "END") {
-		if (modules[i] == "hostname") {
+	i = 0;
+	while (strcmp(modules[i], "END") != 0) {
+		if (strcmp(modules[i], "hostname") == 0) {
 			printf( COLOR_BOLD "HOST: " COLOR_OFF " %s", gethostname());
 		}
-		else if (modules[i] == "os") {
+		else if (strcmp(modules[i], "os") == 0) {
 			printf(COLOR_BOLD "OS: " COLOR_OFF "%s\n", getos());
 		}
-		else if (modules[i] == "shell") {
+		else if (strcmp(modules[i], "shell") == 0) {
 			printf(COLOR_BOLD "SHELL: " COLOR_OFF "%s\n", getshell());
 		}
-		else if (modules[i] == "term") {
+		else if (strcmp(modules[i], "term") == 0) {
 			printf(COLOR_BOLD "TERM: " COLOR_OFF "%s\n", getterm());
 		}
-		else if (modules[i] == "mem") {
+		else if (strcmp(modules[i],"mem") == 0) {
 			printf(COLOR_BOLD "MEM: " COLOR_OFF); 
 			getmem();
 		}
-		else if (modules[i] == "uptime") {
+		else if (strcmp(modules[i], "uptime") == 0) {
 			printf(COLOR_BOLD "UPTIME: " COLOR_OFF "%d hours\n", getuptime()); 
 		}
 		else {

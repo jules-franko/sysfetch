@@ -17,20 +17,26 @@ char *getos(void);
 char *getshell(void) {return getenv("SHELL");}
 char *getterm(void) {return getenv("TERM");}
 int getmem(void);
+int getuptime(void);
 
 double kb_to_gb(double input);
 char *getquotesubstr(char *string);
+void printascii(char *file);
 
 int main(int argc, char *argv[]) {
 
 	if (argc > 1) {
-		for (int i = 1; i < argc; i++) {
+		for (int i = 1; i < argc; i+=2) {
 			if (strcmp(argv[i], "-h") == 0) {
 				printf("Sysfetch - A simple system info utlity. \
 \n\nARGUMENTS:\n \
-	-h - HELP MENU\n\n\
+	-f - Give file to print ascii art from.\n\
+	-h - Display help menu.\n\n\
 Configurations can be made in the config.h file.\n");
 				return 0;
+			}
+			else if (strcmp(argv[i], "-f") == 0) {
+				printascii(argv[i+1]);
 			}
 			else {
 				printf("Unknown command. Do -h for help.\n");
@@ -57,6 +63,9 @@ Configurations can be made in the config.h file.\n");
 			printf(COLOR_BOLD "MEM: " COLOR_OFF); 
 			getmem();
 		}
+		else if (modules[i] == "uptime") {
+			printf(COLOR_BOLD "UPTIME: " COLOR_OFF "%d hours\n", getuptime()); 
+		}
 		else {
 			printf("%s: UNKNOWN MODULE\n", modules[i]);
 			return -1;
@@ -65,6 +74,39 @@ Configurations can be made in the config.h file.\n");
 	}
 
 	return 0;
+}
+
+void printascii(char *file) {
+	FILE *fp = fopen(file, "r");
+	char buf[64+1];
+
+	if (fp == NULL) {
+		printf("Failed to open ascii file!\n");
+		exit(-1);
+		return;
+	}
+
+	while ((fgets(buf, 64, fp)) != NULL) {
+		printf(buf);
+	}
+
+	fclose(fp);
+	return;
+}
+
+int getuptime(void) {
+	FILE *file = fopen("/proc/uptime", "r");
+	double buf;
+
+	if (file == NULL) {
+		return -1;
+	}
+	fscanf(file, "%lf", &buf);
+
+	buf = (buf / 60) / 60;
+
+	fclose(file);
+	return buf;
 }
 
 double kb_to_gb(double input) {

@@ -8,6 +8,9 @@
 
 #define CONVERSION_GB 1024.0
 
+#define COLOR_BOLD  "\e[1m"
+#define COLOR_OFF   "\e[m"
+
 /*Function Declarations*/
 char *gethostname(void);
 char *getos(void);
@@ -25,7 +28,8 @@ int main(int argc, char *argv[]) {
 			if (strcmp(argv[i], "-h") == 0) {
 				printf("Sysfetch - A simple system info utlity. \
 \n\nARGUMENTS:\n \
-	-h - HELP MENU\n");
+	-h - HELP MENU\n\n\
+Configurations can be made in the config.h file.\n");
 				return 0;
 			}
 			else {
@@ -38,19 +42,19 @@ int main(int argc, char *argv[]) {
 	int i = 0;
 	while (modules[i] != "END") {
 		if (modules[i] == "hostname") {
-			printf("HOST: %s", gethostname());
+			printf( COLOR_BOLD "HOST: " COLOR_OFF " %s", gethostname());
 		}
 		else if (modules[i] == "os") {
-			printf("OS: %s\n", getos());
+			printf(COLOR_BOLD "OS: " COLOR_OFF "%s\n", getos());
 		}
 		else if (modules[i] == "shell") {
-			printf("SHELL: %s\n", getshell());
+			printf(COLOR_BOLD "SHELL: " COLOR_OFF "%s\n", getshell());
 		}
 		else if (modules[i] == "term") {
-			printf("TERM: %s\n", getterm());
+			printf(COLOR_BOLD "TERM: " COLOR_OFF "%s\n", getterm());
 		}
 		else if (modules[i] == "mem") {
-			printf("MEM: "); 
+			printf(COLOR_BOLD "MEM: " COLOR_OFF); 
 			getmem();
 		}
 		else {
